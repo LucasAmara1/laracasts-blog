@@ -11,10 +11,11 @@ class PostController extends Controller
     public function index()
     {
         return view('posts.index', [
-            'posts' => Post::latest()
+            'posts' => Post::select(['user_id', 'category_id', 'slug', 'title', 'excerpt', 'body', 'created_at'])
+                ->latest()
                 ->filter(request(['search', 'category', 'author']))
                 ->with(['category:id,name,slug', 'author:id,name,username'])
-                ->get(['user_id', 'category_id', 'slug', 'title', 'excerpt', 'body', 'created_at']),
+                ->paginate(6)->withQueryString()
         ]);
     }
 
