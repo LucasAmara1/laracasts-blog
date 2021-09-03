@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use App\Models\Category;
@@ -16,31 +17,5 @@ use App\Models\User;
 |
 */
 
-Route::get('/', function () {
-    return view('posts', [
-        'posts' => Post::latest()->with(['category:id,name,slug', 'author:id,name,username'])
-            ->get(['user_id','category_id', 'slug', 'title', 'excerpt', 'body', 'created_at']),
-            'categories' => Category::all()
-    ]);
-})->name('home');
-
-Route::get('posts/{post}', function (Post $post) {
-    return view('post', [
-        'post' => $post
-    ]);
-});
-
-Route::get('categories/{category}', function (Category $category) {
-    return view('posts', [
-        'posts' => $category->posts->load(['category:id,name,slug', 'author:id,name,username']),
-        'currentCategory' => $category,
-        'categories' => Category::all()
-    ]);
-})->name('categories');
-
-Route::get('authors/{author}', function (User $author) {
-    return view('posts', [
-        'posts' => $author->posts->load(['category:id,name,slug', 'author:id,name,username']),
-        'categories' => Category::all()
-    ]);
-});
+Route::get('/', [PostController::class, 'index'])->name('home');
+Route::get('posts/{post}', [PostController::class, 'show']);
