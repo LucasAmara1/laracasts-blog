@@ -17,7 +17,9 @@ class Post extends Model
     protected $fillable = [
         'user_id',
         'category_id',
+        'slug',
         'title',
+        'thumbnail',
         'excerpt',
         'body',
         'category_id',
